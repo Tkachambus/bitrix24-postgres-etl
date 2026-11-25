@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Employee day — demo</title>
+<style>
+  :root { --bg:#0b1220; --card:#151f33; --line:#24324c; --text:#e6edf7; --muted:#93a4c3; --accent:#38bdf8; --ok:#34d399; --warn:#fbbf24; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:"Segoe UI", system-ui, -apple-system, sans-serif; }
+  .wrap { padding: 34px 40px; }
+  header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+  .who { display:flex; align-items:center; gap:16px; }
+  .avatar { width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg,#38bdf8,#6366f1); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:13px; }
+  .pill { background:rgba(56,189,248,.12); color:var(--accent); border:1px solid rgba(56,189,248,.35); padding:7px 12px; border-radius:999px; font-size:13px; }
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:18px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; }
+  .label { color:var(--muted); font-size:13px; margin-bottom:10px; }
+  .value { font-size:26px; font-weight:650; }
+  .grid { display:grid; grid-template-columns:1.4fr 1fr; gap:16px; }
+  .days { display:flex; flex-direction:column; gap:12px; margin-top:8px; }
+  .row { display:grid; grid-template-columns:64px 1fr 90px; align-items:center; gap:12px; font-size:14px; }
+  .track { position:relative; height:12px; background:#0e1728; border-radius:8px; overflow:hidden; }
+  .fill { position:absolute; top:0; bottom:0; border-radius:8px; background:linear-gradient(90deg,#22d3ee,#3b82f6); }
+  .late { background:linear-gradient(90deg,#fbbf24,#f59e0b); }
+  .muted { color:var(--muted); font-size:13px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; margin-top:6px; }
+  th { text-align:left; color:var(--muted); font-weight:500; padding:8px 6px; border-bottom:1px solid var(--line); }
+  td { padding:10px 6px; border-bottom:1px solid rgba(36,50,76,.6); }
+  .ok { color:var(--ok); } .warn { color:var(--warn); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="who">
+      <div class="avatar">E42</div>
+      <div>
+        <h1>Employee 042 · Analytics</h1>
+        <div class="sub">Карточка сотрудника · синтетические данные</div>
+      </div>
+    </div>
+    <div class="pill">Период: 14 дней</div>
+  </header>
+
+  <div class="kpis">
+    <div class="card"><div class="label">Средний приход</div><div class="value">09:04</div></div>
+    <div class="card"><div class="label">Средний уход</div><div class="value">18:12</div></div>
+    <div class="card"><div class="label">Эффективные часы</div><div class="value">8.4</div></div>
+    <div class="card"><div class="label">Опоздания</div><div class="value warn">2 из 10</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <p style="margin:0 0 4px;font-size:15px;">Рабочие дни</p>
+      <p class="muted" style="margin:0;">Длительность по данным СКУД</p>
+      <div class="days">
+        <div class="row"><span class="muted">Пн 17</span><div class="track"><div class="fill" style="left:4%;width:82%"></div></div><span>8ч 12м</span></div>
+        <div class="row"><span class="muted">Вт 18</span><div class="track"><div class="fill late" style="left:12%;width:76%"></div></div><span>7ч 36м</span></div>
+        <div class="row"><span class="muted">Ср 19</span><div class="track"><div class="fill" style="left:2%;width:86%"></div></div><span>8ч 36м</span></div>
+        <div class="row"><span class="muted">Чт 20</span><div class="track"><div class="fill" style="left:3%;width:84%"></div></div><span>8ч 24м</span></div>
+        <div class="row"><span class="muted">Пт 21</span><div class="track"><div class="fill" style="left:1%;width:80%"></div></div><span>8ч 00м</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p style="margin:0 0 4px;font-size:15px;">Последние дни</p>
+      <p class="muted" style="margin:0;">Источник: timeman → СКУД</p>
+      <table>
+        <tr><th>Дата</th><th>Приход</th><th>Уход</th><th>Статус</th></tr>
+        <tr><td>21.11</td><td>09:01</td><td>18:05</td><td class="ok">в норме</td></tr>
+        <tr><td>20.11</td><td>09:03</td><td>18:27</td><td class="ok">в норме</td></tr>
+        <tr><td>19.11</td><td>09:02</td><td>18:38</td><td class="ok">в норме</td></tr>
+        <tr><td>18.11</td><td>09:12</td><td>18:48</td><td class="warn">опоздание</td></tr>
+        <tr><td>17.11</td><td>09:04</td><td>18:16</td><td class="ok">в норме</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

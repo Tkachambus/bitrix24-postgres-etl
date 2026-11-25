@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Attendance overview — demo</title>
+<style>
+  :root { --bg:#0b1220; --card:#151f33; --line:#24324c; --text:#e6edf7; --muted:#93a4c3; --accent:#38bdf8; --ok:#34d399; --warn:#fbbf24; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family: "Segoe UI", system-ui, -apple-system, sans-serif; }
+  .wrap { padding: 34px 40px 40px; }
+  header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom: 26px; }
+  h1 { font-size: 26px; margin:0 0 6px; letter-spacing:.2px; }
+  .sub { color:var(--muted); font-size: 14px; }
+  .pill { background: rgba(56,189,248,.12); color: var(--accent); border:1px solid rgba(56,189,248,.35); padding:7px 12px; border-radius: 999px; font-size: 13px; }
+  .kpis { display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 18px; }
+  .card { background: var(--card); border:1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  .kpi-label { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  .kpi-value { font-size: 30px; font-weight: 650; }
+  .kpi-delta { font-size: 13px; margin-top: 8px; }
+  .up { color: var(--ok); } .warn { color: var(--warn); }
+  .grid { display:grid; grid-template-columns: 1.55fr 1fr; gap: 16px; }
+  .chart { display:flex; align-items:flex-end; gap: 18px; height: 240px; padding: 14px 6px 0; }
+  .bar { flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:8px; }
+  .bar i { display:block; width: 100%; border-radius: 8px 8px 4px 4px; background: linear-gradient(180deg,#38bdf8,#2563eb); opacity:.9; }
+  .bar span { color: var(--muted); font-size: 12px; }
+  table { width:100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align:left; color:var(--muted); font-weight:500; padding: 8px 6px; border-bottom:1px solid var(--line); }
+  td { padding: 10px 6px; border-bottom:1px solid rgba(36,50,76,.6); }
+  .badge { display:inline-block; padding: 3px 8px; border-radius: 999px; font-size: 12px; background: rgba(52,211,153,.12); color: var(--ok); }
+  .badge.w { background: rgba(251,191,36,.12); color: var(--warn); }
+  .title { font-size: 15px; margin: 0 0 4px; }
+  .hint { color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Посещаемость: сводка за неделю</h1>
+      <div class="sub">Синтетические данные · demo.analytics_dw</div>
+    </div>
+    <div class="pill">Обновлено 5 мин назад</div>
+  </header>
+
+  <div class="kpis">
+    <div class="card"><div class="kpi-label">Сотрудников в выборке</div><div class="kpi-value">120</div><div class="kpi-delta up">+4 к прошлой неделе</div></div>
+    <div class="card"><div class="kpi-label">Средний приход</div><div class="kpi-value">09:07</div><div class="kpi-delta up">−3 мин</div></div>
+    <div class="card"><div class="kpi-label">Опоздания</div><div class="kpi-value">8.3%</div><div class="kpi-delta warn">+1.1 п.п.</div></div>
+    <div class="card"><div class="kpi-label">Отсутствия</div><div class="kpi-value">5</div><div class="kpi-delta">отпуска и больничные</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <p class="title">Приход по дням</p>
+      <p class="hint">Среднее время первого прохода, минуты после 09:00</p>
+      <div class="chart">
+        <div class="bar"><i style="height:128px"></i><span>Пн</span></div>
+        <div class="bar"><i style="height:156px"></i><span>Вт</span></div>
+        <div class="bar"><i style="height:104px"></i><span>Ср</span></div>
+        <div class="bar"><i style="height:172px"></i><span>Чт</span></div>
+        <div class="bar"><i style="height:140px"></i><span>Пт</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="title">Подразделения</p>
+      <p class="hint">Доля опозданий за неделю</p>
+      <table>
+        <tr><th>Подразделение</th><th>Сотрудники</th><th>Опоздания</th></tr>
+        <tr><td>Engineering</td><td>58</td><td><span class="badge">6.1%</span></td></tr>
+        <tr><td>Analytics</td><td>31</td><td><span class="badge w">11.4%</span></td></tr>
+        <tr><td>Operations</td><td>31</td><td><span class="badge">7.9%</span></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Pipeline health — demo</title>
+<style>
+  :root { --bg:#0b1220; --card:#151f33; --line:#24324c; --text:#e6edf7; --muted:#93a4c3; --accent:#38bdf8; --ok:#34d399; --warn:#fbbf24; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:"Segoe UI", system-ui, -apple-system, sans-serif; }
+  .wrap { padding:34px 40px; }
+  header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:26px; }
+  h1 { font-size:26px; margin:0 0 6px; }
+  .sub { color:var(--muted); font-size:14px; }
+  .pill { background:rgba(52,211,153,.12); color:var(--ok); border:1px solid rgba(52,211,153,.35); padding:7px 12px; border-radius:999px; font-size:13px; }
+  .flow { display:grid; grid-template-columns:1fr 64px 1fr 64px 1fr; align-items:stretch; gap:10px; margin-bottom:20px; }
+  .stage { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; }
+  .stage .name { color:var(--muted); font-size:13px; margin-bottom:10px; }
+  .stage .count { font-size:30px; font-weight:650; margin-bottom:6px; }
+  .stage .meta { color:var(--muted); font-size:12px; }
+  .arrow { display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:26px; }
+  .grid { display:grid; grid-template-columns:1.2fr 1fr; gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; }
+  .log { font-family: Consolas, monospace; font-size:12.5px; color:#b9c8e3; line-height:1.7; }
+  .log b { color:var(--ok); font-weight:600; }
+  .log i { color:var(--accent); font-style:normal; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; color:var(--muted); font-weight:500; padding:8px 6px; border-bottom:1px solid var(--line); }
+  td { padding:10px 6px; border-bottom:1px solid rgba(36,50,76,.6); }
+  .ok { color:var(--ok); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>ETL: состояние пайплайна</h1>
+      <div class="sub">staging → master → dm · синтетические данные</div>
+    </div>
+    <div class="pill">Все воркеры живы</div>
+  </header>
+
+  <div class="flow">
+    <div class="stage">
+      <div class="name">staging.incoming_b24</div>
+      <div class="count">132 807</div>
+      <div class="meta">append-only · батчей: 48</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="stage">
+      <div class="name">master.*</div>
+      <div class="count">132 807</div>
+      <div class="meta">UPSERT · merge за 0.8 с</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="stage">
+      <div class="name">dm.mv_employee_day</div>
+      <div class="count">16 964</div>
+      <div class="meta">refresh каждые 5 мин</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <p style="margin:0 0 10px;font-size:15px;">Лог последнего цикла</p>
+      <div class="log">
+        <div>[10:05:01] <i>fetch</i> scud_event · last_id=132807</div>
+        <div>[10:05:02] fetched 214 items</div>
+        <div>[10:05:02] stored batch <b>ok</b></div>
+        <div>[10:05:03] merge_unmerged() → 1 batch</div>
+        <div>[10:05:03] refresh_mv_employee_day() → 16964 rows</div>
+        <div>[10:05:03] <b>done</b> · errors=0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p style="margin:0 0 6px;font-size:15px;">Сущности</p>
+      <table>
+        <tr><th>Entity</th><th>Строк</th><th>Статус</th></tr>
+        <tr><td>scud_event</td><td>132 807</td><td class="ok">ok</td></tr>
+        <tr><td>scud_session</td><td>81 088</td><td class="ok">ok</td></tr>
+        <tr><td>timeman_entry</td><td>37 726</td><td class="ok">ok</td></tr>
+        <tr><td>scud_user</td><td>591</td><td class="ok">ok</td></tr>
+        <tr><td>absence</td><td>1 044</td><td class="ok">ok</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
