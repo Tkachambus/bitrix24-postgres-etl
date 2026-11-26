@@ -9,6 +9,8 @@ A demo ETL service that pulls data from a corporate API (Bitrix24-like) and load
 into PostgreSQL using **staging → master → data mart** layers. The project is based on
 a real production case; all data, names and addresses here are **synthetic**.
 
+![Attendance dashboard](docs/preview/attendance.png)
+
 ## Highlights
 
 - Python pull-service with background workers and incremental loading (`last_id`).
@@ -21,15 +23,22 @@ a real production case; all data, names and addresses here are **synthetic**.
 
 ## Architecture
 
+![Pipeline architecture](docs/preview/architecture.png)
+
+<details>
+<summary>Text diagram (Mermaid)</summary>
+
 ```mermaid
 flowchart LR
-    A[Source API] -->|pull, last_id| B[(staging.incoming_b24)]
-    B -->|master.merge_unmerged()| C[(master tables)]
-    C --> D[dm.v_employee_day]
-    C --> E[dm.v_session_detail]
-    C --> F[dm.v_employee_month]
-    D --> G[(dm.mv_employee_day)]
+    A["Source API"] -->|"pull, last_id"| B[("staging.incoming_b24")]
+    B -->|"merge_unmerged()"| C[("master tables")]
+    C --> D["dm.v_employee_day"]
+    C --> E["dm.v_session_detail"]
+    C --> F["dm.v_employee_month"]
+    D --> G[("dm.mv_employee_day")]
 ```
+
+</details>
 
 ## Stack
 

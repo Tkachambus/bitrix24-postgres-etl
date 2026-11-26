@@ -18,6 +18,7 @@ PAGES = {
     "attendance": (1400, 760),
     "employee": (1400, 760),
     "pipeline": (1400, 760),
+    "architecture": (1400, 520),
 }
 
 

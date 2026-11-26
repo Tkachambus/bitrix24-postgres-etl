@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Architecture — demo</title>
+<style>
+  :root { --bg:#0b1220; --card:#151f33; --line:#24324c; --text:#e6edf7; --muted:#93a4c3; --accent:#38bdf8; --ok:#34d399; --violet:#818cf8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:"Segoe UI", system-ui, -apple-system, sans-serif; }
+  .wrap { padding:36px 44px 44px; }
+  header { margin-bottom:28px; }
+  h1 { font-size:26px; margin:0 0 6px; }
+  .sub { color:var(--muted); font-size:14px; }
+  .flow { display:grid; grid-template-columns: 1fr 84px 1fr 84px 1fr 84px 1fr 84px 1fr; align-items:center; }
+  .node { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; min-height:120px; display:flex; flex-direction:column; justify-content:center; }
+  .node .kind { color:var(--muted); font-size:12px; letter-spacing:.3px; text-transform:uppercase; margin-bottom:8px; }
+  .node .name { font-size:17px; font-weight:650; margin-bottom:6px; word-break:break-word; }
+  .node .meta { color:var(--muted); font-size:12px; line-height:1.5; }
+  .node.source { border-color:rgba(129,140,248,.5); }
+  .node.mart { border-color:rgba(52,211,153,.45); }
+  .arrow { text-align:center; color:var(--accent); }
+  .arrow .line { font-size:24px; line-height:1; }
+  .arrow .label { color:var(--muted); font-size:11px; margin-top:6px; line-height:1.3; }
+  .notes { display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:24px; }
+  .note { background:rgba(21,31,51,.6); border:1px dashed var(--line); border-radius:12px; padding:14px 16px; font-size:13px; color:var(--muted); }
+  .note b { color:var(--text); font-weight:600; }
+  .pill { display:inline-block; margin-top:14px; background:rgba(56,189,248,.12); color:var(--accent); border:1px solid rgba(56,189,248,.35); padding:6px 12px; border-radius:999px; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Архитектура ETL-пайплайна</h1>
+    <div class="sub">корпоративный API → PostgreSQL: staging → master → data mart → BI</div>
+  </header>
+
+  <div class="flow">
+    <div class="node source">
+      <div class="kind">Source</div>
+      <div class="name">Corporate API</div>
+      <div class="meta">REST · инкрементально<br>last_id / период</div>
+    </div>
+    <div class="arrow"><div class="line">→</div><div class="label">pull<br>workers</div></div>
+    <div class="node">
+      <div class="kind">Staging</div>
+      <div class="name">incoming_b24</div>
+      <div class="meta">append-only JSON<br>дедуп по batch_id</div>
+    </div>
+    <div class="arrow"><div class="line">→</div><div class="label">merge_<br>unmerged()</div></div>
+    <div class="node">
+      <div class="kind">Master</div>
+      <div class="name">normalized tables</div>
+      <div class="meta">UPSERT · события,<br>сессии, табель</div>
+    </div>
+    <div class="arrow"><div class="line">→</div><div class="label">SQL<br>views</div></div>
+    <div class="node mart">
+      <div class="kind">Data mart</div>
+      <div class="name">dm.*</div>
+      <div class="meta">сотрудник × день<br>сессии · сводки</div>
+    </div>
+    <div class="arrow"><div class="line">→</div><div class="label">REFRESH<br>CONCURRENTLY</div></div>
+    <div class="node mart">
+      <div class="kind">Serving</div>
+      <div class="name">mv_employee_day</div>
+      <div class="meta">материализованная<br>витрина</div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note"><b>Качество данных.</b> Ночная сверка staging ↔ master, healthcheck источника по дням, отчёт о расхождениях вместо ручной проверки.</div>
+    <div class="note"><b>Идемпотентность.</b> Повторная загрузка не плодит строки: batch_id + merge_log, UPSERT по натуральным ключам.</div>
+    <div class="note"><b>Эксплуатация.</b> Docker, Nginx, CI на GitHub Actions; алерты о сбоях загрузки в Telegram и портал.</div>
+  </div>
+
+  <div class="pill">demo · синтетические данные · PostgreSQL 16</div>
+</div>
+</body>
+</html>

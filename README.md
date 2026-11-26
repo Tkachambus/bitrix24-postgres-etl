@@ -11,6 +11,8 @@ RU | [EN](README.en.md)
 и складывает их в PostgreSQL по слоям **staging → master → data mart**. Проект собран
 по мотивам production-кейса; все данные, имена и адреса здесь **синтетические**.
 
+![Дашборд посещаемости](docs/preview/attendance.png)
+
 ## Что показывает проект
 
 - pull-сервис на Python с фоновыми воркерами и инкрементальной загрузкой (`last_id`);
@@ -23,15 +25,22 @@ RU | [EN](README.en.md)
 
 ## Архитектура
 
+![Архитектура пайплайна](docs/preview/architecture.png)
+
+<details>
+<summary>Текстовая схема (Mermaid)</summary>
+
 ```mermaid
 flowchart LR
-    A[Source API] -->|pull, last_id| B[(staging.incoming_b24)]
-    B -->|master.merge_unmerged()| C[(master tables)]
-    C --> D[dm.v_employee_day]
-    C --> E[dm.v_session_detail]
-    C --> F[dm.v_employee_month]
-    D --> G[(dm.mv_employee_day)]
+    A["Source API"] -->|"pull, last_id"| B[("staging.incoming_b24")]
+    B -->|"merge_unmerged()"| C[("master tables")]
+    C --> D["dm.v_employee_day"]
+    C --> E["dm.v_session_detail"]
+    C --> F["dm.v_employee_month"]
+    D --> G[("dm.mv_employee_day")]
 ```
+
+</details>
 
 ## Данные
 
